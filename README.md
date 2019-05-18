@@ -32,3 +32,21 @@ https://github.com/HDLR/dfjinxin-sc-sec/blob/master/dfjinxin-monitor/software/im
 https://github.com/HDLR/dfjinxin-sc-sec/blob/master/dfjinxin-monitor/software/imag/4.jpg
 )
 
+二、dfjinxin-monitor系统监控模块
+
+![image.png](
+https://github.com/HDLR/dfjinxin-sc-sec/blob/master/dfjinxin-monitor/software/imag/5.jpg
+)
+
+在DfjinxinMonitorApplication.java类点击右键启动就行
+
+![image.png](
+https://github.com/HDLR/dfjinxin-sc-sec/blob/master/dfjinxin-monitor/software/imag/7.jpg
+)
+
+![image.png](
+https://github.com/HDLR/dfjinxin-sc-sec/blob/master/dfjinxin-monitor/software/imag/6.jpg
+)
+
+
+
