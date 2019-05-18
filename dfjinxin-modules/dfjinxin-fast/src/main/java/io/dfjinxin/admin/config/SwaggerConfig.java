@@ -1,5 +1,5 @@
 ///**
-// * 2019 东方金信
+// * 2019 dfjinxin
 // *
 // *
 // *
@@ -45,7 +45,7 @@
 //
 //    private ApiInfo apiInfo() {
 //        return new ApiInfoBuilder()
-//            .title("东方金信")
+//            .title("dfjinxin")
 //            .description("dfjinxin-fast文档")
 //            .termsOfServiceUrl("http://www.seaboxdata.com")
 //            .version("3.0.0")

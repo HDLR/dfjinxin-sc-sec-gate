@@ -2,8 +2,8 @@
   <nav class="site-navbar" :class="'site-navbar--' + navbarLayoutType">
     <div class="site-navbar__header">
       <h1 class="site-navbar__brand" @click="$router.push({ name: 'home' })">
-        <a class="site-navbar__brand-lg" href="javascript:;">东方金信权限管理</a>
-        <a class="site-navbar__brand-mini" href="javascript:;">金信</a>
+        <a class="site-navbar__brand-lg" href="javascript:;">dfjinxin权限管理</a>
+        <a class="site-navbar__brand-mini" href="javascript:;">jinxin</a>
       </h1>
     </div>
     <div class="site-navbar__body clearfix">
@@ -26,7 +26,7 @@
         </el-menu-item>
         <el-menu-item index="2">
           <el-badge value="hot">
-            <a href="//www.seaboxdata.com/" target="_blank">东方金信官方官网</a>
+            <a href="//www.seaboxdata.com/" target="_blank">dfjinxin官方官网</a>
           </el-badge>
         </el-menu-item>
         <el-submenu index="3">
