@@ -1,18 +1,14 @@
 package com.dfjinxin.common.handler;
 
-import com.dfjinxin.common.constant.CommonConstants;
 import com.dfjinxin.common.exception.BaseException;
 import com.dfjinxin.common.exception.auth.*;
-//import com.dfjinxin.common.msg.BaseResponse;
 import com.dfjinxin.common.msg.R;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice("com.dfjinxin")
-@ResponseBody
+@RestControllerAdvice("com.dfjinxin")
 public class GlobalExceptionHandler {
     private Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
