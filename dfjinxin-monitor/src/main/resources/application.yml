@@ -1,6 +1,6 @@
 spring:
     application:
-        name: ace-monitor
+        name: dfjinxin-monitor
     cloud:
       nacos:
         discovery:
