@@ -11,40 +11,32 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletResponse;
-
-
 @ControllerAdvice("com.dfjinxin")
 @ResponseBody
 public class GlobalExceptionHandler {
     private Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(ClientTokenException.class)
-    public R clientTokenExceptionHandler(HttpServletResponse response, ClientTokenException ex) {
-        response.setStatus(403);
+    public R clientTokenExceptionHandler(ClientTokenException ex) {
         logger.error(ex.getMessage(),ex);
-//        return new BaseResponse(ex.getStatus(), ex.getMessage());
         return R.error(403, ex.getMessage());
     }
 
     @ExceptionHandler(UserTokenException.class)
-    public R userTokenExceptionHandler(HttpServletResponse response, UserTokenException ex) {
-        response.setStatus(200);
+    public R userTokenExceptionHandler(UserTokenException ex) {
         logger.error(ex.getMessage(),ex);
         return R.error(200, ex.getMessage());
     }
 
     @ExceptionHandler(UserInvalidException.class)
-    public R userInvalidExceptionHandler(HttpServletResponse response, UserInvalidException ex) {
-        response.setStatus(200);
+    public R userInvalidExceptionHandler(UserInvalidException ex) {
         logger.error(ex.getMessage(),ex);
         return R.error(200, ex.getMessage());
     }
 
     @ExceptionHandler(BaseException.class)
-    public R baseExceptionHandler(HttpServletResponse response, BaseException ex) {
+    public R baseExceptionHandler(BaseException ex) {
         logger.error(ex.getMessage(),ex);
-        response.setStatus(500);
         return R.error(500, ex.getMessage());
     }
 
@@ -70,13 +62,6 @@ public class GlobalExceptionHandler {
         return R.error(500, e.getMessage());
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public R otherExceptionHandler(HttpServletResponse response, Exception ex) {
-//        response.setStatus(500);
-//        logger.error(ex.getMessage(),ex);
-//        return R.error(CommonConstants.EX_OTHER_CODE, ex.getMessage());
-//    }
-
     @ExceptionHandler(Exception.class)
     public R handleException(Exception e){
         logger.error(e.getMessage(), e);
@@ -85,4 +70,5 @@ public class GlobalExceptionHandler {
         }
         return R.error();
     }
+
 }

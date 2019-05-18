@@ -84,7 +84,7 @@ spring:
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
   #实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: io.dfjinxin.admin.modules.*.entity
+  typeAliasesPackage: com.dfjinxin.admin.modules.*.entity
   global-config:
     #数据库相关配置
     db-config:
