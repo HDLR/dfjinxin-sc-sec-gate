@@ -13,11 +13,8 @@ import com.dfjinxin.admin.modules.sys.dao.SysMenuDao;
 import com.dfjinxin.admin.modules.sys.dao.SysUserDao;
 import com.dfjinxin.admin.modules.sys.entity.SysMenuEntity;
 import com.dfjinxin.common.constant.RedisConstants;
-import com.dfjinxin.admin.modules.sys.dao.SysMenuDao;
-import com.dfjinxin.admin.modules.sys.dao.SysUserDao;
-import com.dfjinxin.admin.modules.sys.entity.SysMenuEntity;
-import com.dfjinxin.admin.common.utils.Constant;
 import com.dfjinxin.admin.modules.sys.service.PermissonService;
+import com.dfjinxin.common.vo.PermissionInfo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,7 +29,6 @@ public class PermissonServiceImpl implements PermissonService {
     @Autowired
     private SysUserDao sysUserDao;
 
-    @Cacheable(value = RedisConstants.AUTH_PERMISSION, key = "#userId")
     @Override
     public Set<String> getUserPermissions(long userId) {
         List<String> permsList;
@@ -56,5 +52,51 @@ public class PermissonServiceImpl implements PermissonService {
             permsSet.addAll(Arrays.asList(perms.trim().split(",")));
         }
         return permsSet;
+    }
+
+    @Override
+    public List<PermissionInfo> permissonByUserId(long userId){
+        List<PermissionInfo> permissionInfos;
+        List<SysMenuEntity> menuList;
+        //系统管理员，拥有最高权限
+        if(userId == Constant.SUPER_ADMIN){
+            menuList = sysMenuDao.selectList(null);
+        }else{
+            menuList = sysUserDao.queryAllSysUserEntity(userId);
+        }
+
+        permissionInfos = new ArrayList<>(menuList.size());
+        for(SysMenuEntity menu : menuList){
+            PermissionInfo info = new PermissionInfo();
+            info.setCode(menu.getPerms());
+            info.setType(menu.getType());
+            info.setUri(menu.getUrl());
+            info.setMethod(menu.getMethod());
+            info.setName(menu.getName());
+            permissionInfos.add(info);
+        }
+
+        //用户权限列表
+        return permissionInfos;
+    }
+
+    @Override
+    public List<PermissionInfo> allPermisson(){
+        List<PermissionInfo> permissionInfos;
+        List<SysMenuEntity> menuList = sysMenuDao.selectList(null);
+
+        permissionInfos = new ArrayList<>(menuList.size());
+        for(SysMenuEntity menu : menuList){
+            PermissionInfo info = new PermissionInfo();
+            info.setCode(menu.getPerms());
+            info.setType(menu.getType());
+            info.setUri(menu.getUrl());
+            info.setMethod(menu.getMethod());
+            info.setName(menu.getName());
+            permissionInfos.add(info);
+        }
+
+        //用户权限列表
+        return permissionInfos;
     }
 }

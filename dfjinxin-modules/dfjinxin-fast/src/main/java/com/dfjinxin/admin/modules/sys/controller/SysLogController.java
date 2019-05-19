@@ -9,9 +9,7 @@
 package com.dfjinxin.admin.modules.sys.controller;
 
 import com.dfjinxin.admin.common.utils.PageUtils;
-import com.dfjinxin.auth.client.annotation.AuthorityPermission;
 import com.dfjinxin.common.msg.R;
-import com.dfjinxin.admin.common.utils.PageUtils;
 import com.dfjinxin.admin.modules.sys.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,8 +37,7 @@ public class SysLogController {
 	 */
 	@ResponseBody
 	@GetMapping("/list")
-	@AuthorityPermission("sys:log:list")
-	public R list(@RequestParam Map<String, Object> params){
+    public R list(@RequestParam Map<String, Object> params){
 		PageUtils page = sysLogService.queryPage(params);
 
 		return R.ok().put("page", page);

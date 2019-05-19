@@ -33,6 +33,14 @@
       <el-form-item v-if="dataForm.type === 1" label="菜单路由" prop="url">
         <el-input v-model="dataForm.url" placeholder="菜单路由"></el-input>
       </el-form-item>
+      <el-form-item v-if="dataForm.type === 2" label="资源路径" prop="url">
+        <el-input v-model="dataForm.url" placeholder="资源路径"></el-input>
+      </el-form-item>
+      <el-form-item v-if="dataForm.type === 2" label="请求类型" prop="method">
+        <el-select class="filter-item" v-model="dataForm.method" placeholder="请输入资源请求类型">
+          <el-option v-for="item in  methodOptions" :key="item" :label="item" :value="item"> </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item v-if="dataForm.type !== 0" label="授权标识" prop="perms">
         <el-input v-model="dataForm.perms" placeholder="多个用逗号分隔, 如: user:list,user:create"></el-input>
       </el-form-item>
@@ -88,6 +96,7 @@
         }
       }
       return {
+        methodOptions: ['GET', 'POST', 'PUT', 'DELETE'],
         visible: false,
         dataForm: {
           id: 0,
@@ -97,6 +106,7 @@
           parentId: 0,
           parentName: '',
           url: '',
+          method: '',
           perms: '',
           orderNum: 0,
           icon: '',
@@ -153,6 +163,7 @@
               this.dataForm.name = data.menu.name
               this.dataForm.parentId = data.menu.parentId
               this.dataForm.url = data.menu.url
+              this.dataForm.method = data.menu.method
               this.dataForm.perms = data.menu.perms
               this.dataForm.orderNum = data.menu.orderNum
               this.dataForm.icon = data.menu.icon
@@ -188,6 +199,7 @@
                 'name': this.dataForm.name,
                 'parentId': this.dataForm.parentId,
                 'url': this.dataForm.url,
+                'method': this.dataForm.method,
                 'perms': this.dataForm.perms,
                 'orderNum': this.dataForm.orderNum,
                 'icon': this.dataForm.icon

@@ -14,14 +14,8 @@ import com.dfjinxin.admin.common.utils.PageUtils;
 import com.dfjinxin.admin.common.validator.ValidatorUtils;
 import com.dfjinxin.common.msg.R;
 import com.dfjinxin.admin.modules.sys.entity.SysRoleEntity;
-import com.dfjinxin.admin.common.annotation.SysLog;
-import com.dfjinxin.admin.common.utils.Constant;
-import com.dfjinxin.admin.common.utils.PageUtils;
-import com.dfjinxin.admin.common.validator.ValidatorUtils;
-import com.dfjinxin.admin.modules.sys.entity.SysRoleEntity;
 import com.dfjinxin.admin.modules.sys.service.SysRoleMenuService;
 import com.dfjinxin.admin.modules.sys.service.SysRoleService;
-import com.dfjinxin.auth.client.annotation.AuthorityPermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +40,6 @@ public class SysRoleController extends AbstractController {
 	 * 角色列表
 	 */
 	@GetMapping("/list")
-	@AuthorityPermission("sys:role:list")
 	public R list(@RequestParam Map<String, Object> params){
 		//如果不是超级管理员，则只查询自己创建的角色列表
 		if(getUserId() != Constant.SUPER_ADMIN){
@@ -62,7 +55,6 @@ public class SysRoleController extends AbstractController {
 	 * 角色列表
 	 */
 	@GetMapping("/select")
-	@AuthorityPermission("sys:role:select")
 	public R select(){
 		Map<String, Object> map = new HashMap<>();
 		
@@ -79,7 +71,6 @@ public class SysRoleController extends AbstractController {
 	 * 角色信息
 	 */
 	@GetMapping("/info/{roleId}")
-	@AuthorityPermission("sys:role:info")
 	public R info(@PathVariable("roleId") Long roleId){
 		SysRoleEntity role = sysRoleService.getById(roleId);
 		
@@ -95,7 +86,6 @@ public class SysRoleController extends AbstractController {
 	 */
 	@SysLog("保存角色")
 	@PostMapping("/save")
-	@AuthorityPermission("sys:role:save")
 	public R save(@RequestBody SysRoleEntity role){
 		ValidatorUtils.validateEntity(role);
 		
@@ -110,7 +100,6 @@ public class SysRoleController extends AbstractController {
 	 */
 	@SysLog("修改角色")
 	@PostMapping("/update")
-	@AuthorityPermission("sys:role:update")
 	public R update(@RequestBody SysRoleEntity role){
 		ValidatorUtils.validateEntity(role);
 		
@@ -125,7 +114,6 @@ public class SysRoleController extends AbstractController {
 	 */
 	@SysLog("删除角色")
 	@PostMapping("/delete")
-	@AuthorityPermission("sys:role:delete")
 	public R delete(@RequestBody Long[] roleIds){
 		sysRoleService.deleteBatch(roleIds);
 		

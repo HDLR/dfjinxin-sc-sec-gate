@@ -16,27 +16,13 @@ import com.dfjinxin.admin.common.validator.Assert;
 import com.dfjinxin.admin.common.validator.ValidatorUtils;
 import com.dfjinxin.admin.common.validator.group.AddGroup;
 import com.dfjinxin.admin.common.validator.group.UpdateGroup;
-import com.dfjinxin.auth.client.annotation.AuthorityPermission;
-import com.dfjinxin.common.constant.UserConstant;
 import com.dfjinxin.common.msg.R;
-import com.dfjinxin.admin.common.utils.EncoderUtils;
 import com.dfjinxin.admin.modules.sys.entity.SysUserEntity;
 import com.dfjinxin.admin.modules.sys.form.PasswordForm;
 import com.dfjinxin.admin.modules.sys.service.SysUserService;
-import com.dfjinxin.admin.common.annotation.SysLog;
-import com.dfjinxin.admin.common.utils.Constant;
-import com.dfjinxin.admin.common.utils.PageUtils;
-import com.dfjinxin.admin.common.validator.Assert;
-import com.dfjinxin.admin.common.validator.ValidatorUtils;
-import com.dfjinxin.admin.common.validator.group.AddGroup;
-import com.dfjinxin.admin.common.validator.group.UpdateGroup;
-import com.dfjinxin.admin.modules.sys.entity.SysUserEntity;
-import com.dfjinxin.admin.modules.sys.form.PasswordForm;
 import com.dfjinxin.admin.modules.sys.service.SysUserRoleService;
-import com.dfjinxin.admin.modules.sys.service.SysUserService;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,7 +45,6 @@ public class SysUserController extends AbstractController {
 	 * 所有用户列表
 	 */
 	@GetMapping("/list")
-	@AuthorityPermission("sys:user:list")
 	public R list(@RequestParam Map<String, Object> params){
 		//只有超级管理员，才能查看所有管理员列表
 		if(getUserId() != Constant.SUPER_ADMIN){
@@ -104,7 +89,6 @@ public class SysUserController extends AbstractController {
 	 * 用户信息
 	 */
 	@GetMapping("/info/{userId}")
-	@AuthorityPermission("sys:user:info")
 	public R info(@PathVariable("userId") Long userId){
 		SysUserEntity user = sysUserService.getById(userId);
 		
@@ -120,7 +104,6 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("保存用户")
 	@PostMapping("/save")
-	@AuthorityPermission("sys:user:save")
 	public R save(@RequestBody SysUserEntity user){
 		ValidatorUtils.validateEntity(user, AddGroup.class);
 		
@@ -135,7 +118,6 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("修改用户")
 	@PostMapping("/update")
-	@AuthorityPermission("sys:user:update")
 	public R update(@RequestBody SysUserEntity user){
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
 
@@ -150,7 +132,6 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("删除用户")
 	@PostMapping("/delete")
-	@AuthorityPermission("sys:user:delete")
 	public R delete(@RequestBody Long[] userIds){
 		if(ArrayUtils.contains(userIds, 1L)){
 			return R.error("系统管理员不能删除");

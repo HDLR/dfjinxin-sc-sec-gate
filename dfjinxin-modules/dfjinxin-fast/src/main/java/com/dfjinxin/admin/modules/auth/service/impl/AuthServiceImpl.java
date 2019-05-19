@@ -12,9 +12,12 @@ import com.dfjinxin.admin.modules.auth.service.AuthService;
 import com.dfjinxin.admin.modules.auth.utils.JwtTokenUtil;
 import com.dfjinxin.admin.modules.sys.entity.SysUserEntity;
 import com.dfjinxin.admin.modules.sys.service.SysUserService;
+import com.dfjinxin.common.vo.PermissionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -48,9 +51,9 @@ public class AuthServiceImpl implements AuthService {
         }
 
         //验证成功后清除原先redis的权限缓存
-        redisTemplate.delete(RedisConstants.AUTH_PERMISSION + "::" + user.getUserId());
+        redisTemplate.delete(RedisConstants.USER_PERMISSION + "::" + user.getUserId());
+        redisTemplate.delete(RedisConstants.ALL_PERMISSION + "::SimpleKey []");
 
         return token;
     }
-
 }

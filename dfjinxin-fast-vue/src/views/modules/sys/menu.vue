@@ -70,6 +70,14 @@
         label="菜单URL">
       </el-table-column>
       <el-table-column
+        prop="method"
+        header-align="center"
+        align="center"
+        width="100"
+        :show-overflow-tooltip="true"
+        label="请求类型">
+      </el-table-column>
+      <el-table-column
         prop="perms"
         header-align="center"
         align="center"

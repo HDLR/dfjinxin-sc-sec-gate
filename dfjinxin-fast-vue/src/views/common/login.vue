@@ -70,7 +70,7 @@
                 this.$refs['dataForm'].validate((valid) => {
                     if (valid) {
                         this.$http({
-                            url: this.$http.adornUrl('/jwt/token'),
+                            url: this.$http.adornUrl('/sys/jwt/token'),
                             method: 'post',
                             data: this.$http.adornData({
                                 'username': this.dataForm.userName,

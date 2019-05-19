@@ -9,6 +9,7 @@
 package com.dfjinxin.admin.modules.sys.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.dfjinxin.admin.modules.sys.entity.SysMenuEntity;
 import com.dfjinxin.admin.modules.sys.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -27,6 +28,8 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
 	 * @param userId  用户ID
 	 */
 	List<String> queryAllPerms(Long userId);
+
+	List<SysMenuEntity> queryAllSysUserEntity(Long userId);
 	
 	/**
 	 * 查询用户的所有菜单ID

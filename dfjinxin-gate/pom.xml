@@ -97,6 +97,12 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.dfjinxin</groupId>
+            <artifactId>dfjinxin-cache</artifactId>
+            <version>v2-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
     <build>
         <finalName>dfjinxin-gate</finalName>

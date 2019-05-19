@@ -22,21 +22,7 @@ import com.dfjinxin.admin.common.validator.group.QcloudGroup;
 import com.dfjinxin.admin.common.validator.group.QiniuGroup;
 import com.dfjinxin.admin.modules.oss.cloud.CloudStorageConfig;
 import com.dfjinxin.admin.modules.oss.cloud.OSSFactory;
-import com.dfjinxin.admin.modules.oss.entity.SysOssEntity;
 import com.dfjinxin.admin.modules.sys.service.SysConfigService;
-import com.dfjinxin.admin.common.utils.ConfigConstant;
-import com.dfjinxin.admin.common.utils.Constant;
-import com.dfjinxin.admin.common.utils.PageUtils;
-import com.dfjinxin.admin.common.validator.ValidatorUtils;
-import com.dfjinxin.admin.common.validator.group.AliyunGroup;
-import com.dfjinxin.admin.common.validator.group.QcloudGroup;
-import com.dfjinxin.admin.common.validator.group.QiniuGroup;
-import com.dfjinxin.admin.modules.oss.cloud.CloudStorageConfig;
-import com.dfjinxin.admin.modules.oss.cloud.OSSFactory;
-import com.dfjinxin.admin.modules.oss.entity.SysOssEntity;
-import com.dfjinxin.admin.modules.oss.service.SysOssService;
-import com.dfjinxin.admin.modules.sys.service.SysConfigService;
-import com.dfjinxin.auth.client.annotation.AuthorityPermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,8 +50,7 @@ public class SysOssController {
 	 * 列表
 	 */
 	@GetMapping("/list")
-	@AuthorityPermission("sys:oss:all")
-	public R list(@RequestParam Map<String, Object> params){
+    public R list(@RequestParam Map<String, Object> params){
 		PageUtils page = sysOssService.queryPage(params);
 
 		return R.ok().put("page", page);
@@ -76,7 +61,6 @@ public class SysOssController {
      * 云存储配置信息
      */
     @GetMapping("/config")
-    @AuthorityPermission("sys:oss:all")
     public R config(){
         CloudStorageConfig config = sysConfigService.getConfigObject(KEY, CloudStorageConfig.class);
 
@@ -88,8 +72,7 @@ public class SysOssController {
 	 * 保存云存储配置信息
 	 */
 	@PostMapping("/saveConfig")
-	@AuthorityPermission("sys:oss:all")
-	public R saveConfig(@RequestBody CloudStorageConfig config){
+    public R saveConfig(@RequestBody CloudStorageConfig config){
 		//校验类型
 		ValidatorUtils.validateEntity(config);
 
@@ -114,8 +97,7 @@ public class SysOssController {
 	 * 上传文件
 	 */
 	@PostMapping("/upload")
-	@AuthorityPermission("sys:oss:all")
-	public R upload(@RequestParam("file") MultipartFile file) throws Exception {
+    public R upload(@RequestParam("file") MultipartFile file) throws Exception {
 		if (file.isEmpty()) {
 			throw new RRException("上传文件不能为空");
 		}
@@ -138,8 +120,7 @@ public class SysOssController {
 	 * 删除
 	 */
 	@PostMapping("/delete")
-	@AuthorityPermission("sys:oss:all")
-	public R delete(@RequestBody Long[] ids){
+    public R delete(@RequestBody Long[] ids){
 		sysOssService.removeByIds(Arrays.asList(ids));
 
 		return R.ok();

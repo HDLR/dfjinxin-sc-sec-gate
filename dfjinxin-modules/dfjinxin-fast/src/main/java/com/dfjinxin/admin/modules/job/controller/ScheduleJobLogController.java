@@ -12,10 +12,6 @@ import com.dfjinxin.common.msg.R;
 import com.dfjinxin.admin.common.utils.PageUtils;
 import com.dfjinxin.admin.modules.job.entity.ScheduleJobLogEntity;
 import com.dfjinxin.admin.modules.job.service.ScheduleJobLogService;
-import com.dfjinxin.admin.common.utils.PageUtils;
-import com.dfjinxin.admin.modules.job.entity.ScheduleJobLogEntity;
-import com.dfjinxin.admin.modules.job.service.ScheduleJobLogService;
-import com.dfjinxin.auth.client.annotation.AuthorityPermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +35,6 @@ public class ScheduleJobLogController {
 	 * 定时任务日志列表
 	 */
 	@RequestMapping("/list")
-	@AuthorityPermission("sys:schedule:log")
 	public R list(@RequestParam Map<String, Object> params){
 		PageUtils page = scheduleJobLogService.queryPage(params);
 		
