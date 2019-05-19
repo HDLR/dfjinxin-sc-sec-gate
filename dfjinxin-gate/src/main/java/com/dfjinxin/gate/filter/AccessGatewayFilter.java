@@ -209,7 +209,9 @@ public class AccessGatewayFilter implements GlobalFilter {
             boolean anyMatch = permissionInfos.parallelStream().anyMatch(new Predicate<PermissionInfo>() {
                 @Override
                 public boolean test(PermissionInfo permissionInfo) {
-                    return permissionInfo.getCode().equals(info.getCode());
+                    String pcode = permissionInfo.getCode();
+                    String icode = info.getCode();
+                    return (null != pcode && null != icode) && pcode.equals(icode);
                 }
             });
             if (anyMatch) {
