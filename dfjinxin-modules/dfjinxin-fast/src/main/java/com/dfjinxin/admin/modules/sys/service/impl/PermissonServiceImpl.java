@@ -67,13 +67,15 @@ public class PermissonServiceImpl implements PermissonService {
 
         permissionInfos = new ArrayList<>(menuList.size());
         for(SysMenuEntity menu : menuList){
-            PermissionInfo info = new PermissionInfo();
-            info.setCode(menu.getPerms());
-            info.setType(menu.getType());
-            info.setUri(menu.getUrl());
-            info.setMethod(menu.getMethod());
-            info.setName(menu.getName());
-            permissionInfos.add(info);
+            if(null != menu){
+                PermissionInfo info = new PermissionInfo();
+                info.setCode(menu.getPerms());
+                info.setType(menu.getType());
+                info.setUri(menu.getUrl());
+                info.setMethod(menu.getMethod());
+                info.setName(menu.getName());
+                permissionInfos.add(info);
+            }
         }
 
         //用户权限列表
