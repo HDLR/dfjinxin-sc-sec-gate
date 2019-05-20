@@ -5,6 +5,9 @@ import com.dfjinxin.auth.client.config.UserAuthConfig;
 import com.dfjinxin.auth.client.jwt.UserAuthUtil;
 import com.dfjinxin.auth.common.util.jwt.IJWTInfo;
 import com.dfjinxin.common.context.BaseContextHandler;
+import com.dfjinxin.common.exception.auth.AuthorizationException;
+import com.dfjinxin.common.exception.auth.ClientTokenException;
+import com.dfjinxin.common.exception.auth.FeignException;
 import com.dfjinxin.common.msg.R;
 import com.dfjinxin.common.vo.PermissionInfo;
 import com.dfjinxin.gate.service.IAuthAdminService;
@@ -51,47 +54,64 @@ public class AccessGatewayFilter implements GlobalFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange serverWebExchange, GatewayFilterChain gatewayFilterChain) {
-        log.info("check token and user permission....");
-        LinkedHashSet requiredAttribute = serverWebExchange.getRequiredAttribute(ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR);
-        ServerHttpRequest request = serverWebExchange.getRequest();
-        String requestUri = request.getPath().pathWithinApplication().value();
-        if (requiredAttribute != null) {
-            Iterator<URI> iterator = requiredAttribute.iterator();
-            while (iterator.hasNext()){
-                URI next = iterator.next();
-                if(next.getPath().startsWith(GATE_WAY_PREFIX)){
-                    requestUri = next.getPath().substring(GATE_WAY_PREFIX.length());
+
+        try{
+            log.info("check token and user permission....");
+            LinkedHashSet requiredAttribute = serverWebExchange.getRequiredAttribute(ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR);
+            ServerHttpRequest request = serverWebExchange.getRequest();
+            String requestUri = request.getPath().pathWithinApplication().value();
+            if (requiredAttribute != null) {
+                Iterator<URI> iterator = requiredAttribute.iterator();
+                while (iterator.hasNext()){
+                    URI next = iterator.next();
+                    if(next.getPath().startsWith(GATE_WAY_PREFIX)){
+                        requestUri = next.getPath().substring(GATE_WAY_PREFIX.length());
+                    }
                 }
             }
-        }
-        final String method = request.getMethod().toString();
-        BaseContextHandler.setToken(null);
-        ServerHttpRequest.Builder mutate = request.mutate();
-        // 不进行拦截的地址
-        if (isStartWith(requestUri)) {
+            final String method = request.getMethod().toString();
+            BaseContextHandler.setToken(null);
+            ServerHttpRequest.Builder mutate = request.mutate();
+            // 不进行拦截的地址
+            if (isStartWith(requestUri)) {
+                ServerHttpRequest build = mutate.build();
+                return gatewayFilterChain.filter(serverWebExchange.mutate().request(build).build());
+            }
+            IJWTInfo user = null;
+            try {
+                user = getJWTUser(request, mutate);
+            } catch (Exception e) {
+                throw new ClientTokenException("token无效或者过期！");
+            }
+            List<PermissionInfo> permissionIfs = authAdminService.allPermisson();
+            // 判断资源是否启用权限约束
+            Stream<PermissionInfo> stream = getPermissionIfs(requestUri, method, permissionIfs);
+            List<PermissionInfo> result = stream.collect(Collectors.toList());
+            PermissionInfo[] permissions = result.toArray(new PermissionInfo[]{});
+            if (permissions.length > 0) {
+                if (checkUserPermission(permissions, serverWebExchange, user)) {
+                    throw new AuthorizationException("无此操作的权限，请联系管理员确认!");
+                }
+            }
             ServerHttpRequest build = mutate.build();
             return gatewayFilterChain.filter(serverWebExchange.mutate().request(build).build());
-        }
-        IJWTInfo user = null;
-        try {
-            user = getJWTUser(request, mutate);
-        } catch (Exception e) {
-            log.error("用户Token过期异常", e);
-            return getVoidMono(serverWebExchange, R.error("User Token Forbidden or Expired!"));
-        }
-        List<PermissionInfo> permissionIfs = authAdminService.allPermisson();
-        // 判断资源是否启用权限约束
-        Stream<PermissionInfo> stream = getPermissionIfs(requestUri, method, permissionIfs);
-        List<PermissionInfo> result = stream.collect(Collectors.toList());
-        PermissionInfo[] permissions = result.toArray(new PermissionInfo[]{});
-        if (permissions.length > 0) {
-            if (checkUserPermission(permissions, serverWebExchange, user)) {
-                return getVoidMono(serverWebExchange, R.error("无此操作的权限，请联系管理员确认!"));
-            }
-        }
-        ServerHttpRequest build = mutate.build();
-        return gatewayFilterChain.filter(serverWebExchange.mutate().request(build).build());
 
+        } catch (ClientTokenException e) {
+            log.error("用户Token过期异常", e);
+            return getVoidMono(serverWebExchange, R.error(e.getMessage()));
+
+        } catch (AuthorizationException e) {
+            log.error("无此操作的权限，请联系管理员确认", e);
+            return getVoidMono(serverWebExchange, R.error(e.getMessage()));
+
+        } catch (FeignException e) {
+            log.error("feign调用异常", e);
+            return getVoidMono(serverWebExchange, R.error(e.getMessage()));
+
+        } catch (Exception e) {
+            log.error("系统异常", e);
+            return getVoidMono(serverWebExchange, R.error("系统异常，请联系管理员"));
+        }
     }
 
     /**
