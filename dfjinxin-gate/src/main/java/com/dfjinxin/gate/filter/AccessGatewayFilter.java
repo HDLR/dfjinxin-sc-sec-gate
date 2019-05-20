@@ -86,7 +86,7 @@ public class AccessGatewayFilter implements GlobalFilter {
         PermissionInfo[] permissions = result.toArray(new PermissionInfo[]{});
         if (permissions.length > 0) {
             if (checkUserPermission(permissions, serverWebExchange, user)) {
-                return getVoidMono(serverWebExchange, R.error("User Forbidden!Does not has Permission!"));
+                return getVoidMono(serverWebExchange, R.error("无此操作的权限，请联系管理员确认!"));
             }
         }
         ServerHttpRequest build = mutate.build();
