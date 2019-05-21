@@ -110,7 +110,7 @@ public class AccessGatewayFilter implements GlobalFilter {
 
         } catch (Exception e) {
             log.error("系统异常", e);
-            return getVoidMono(serverWebExchange, R.error("系统异常，请联系管理员"));
+            return getVoidMono(serverWebExchange, R.error(e.getMessage()));
         }
     }
 
