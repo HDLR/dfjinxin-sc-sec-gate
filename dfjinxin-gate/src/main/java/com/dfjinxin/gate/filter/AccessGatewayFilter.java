@@ -83,7 +83,7 @@ public class AccessGatewayFilter implements GlobalFilter {
             } catch (Exception e) {
                 throw new ClientTokenException("token无效或者过期！");
             }
-            List<PermissionInfo> permissionIfs = authAdminService.allPermisson();
+            List<PermissionInfo> permissionIfs = authAdminService.allPermisson(user.getId());
             // 判断资源是否启用权限约束
             Stream<PermissionInfo> stream = getPermissionIfs(requestUri, method, permissionIfs);
             List<PermissionInfo> result = stream.collect(Collectors.toList());
@@ -133,31 +133,20 @@ public class AccessGatewayFilter implements GlobalFilter {
      *
      * @param requestUri
      * @param method
-     * @param serviceInfo
+     * @param servicePermissions
      * @return
      */
-    private Stream<PermissionInfo> getPermissionIfs(final String requestUri, final String method, List<PermissionInfo> serviceInfo) {
-        return serviceInfo.parallelStream().filter(new Predicate<PermissionInfo>() {
+    private Stream<PermissionInfo> getPermissionIfs(final String requestUri, final String method, List<PermissionInfo> servicePermissions) {
+        return servicePermissions.parallelStream().filter(new Predicate<PermissionInfo>() {
             @Override
             public boolean test(PermissionInfo permissionInfo) {
                 String uri = permissionInfo.getUri();
                 if(StringUtils.isNotBlank(uri)){
-                    uri = uri.replaceAll(" ", "").replaceAll("，", ",");
-                    List<String> uris = new ArrayList<String>();
-                    if(uri.contains(",")){
-                        for(String v : uri.split(",")){
-                            uris.add(v);
-                        }
-                    }else{
-                        uris.add(uri);
+                    if (uri.indexOf("{") > 0) {
+                        uri = uri.replaceAll("\\{\\*\\}", "[a-zA-Z\\\\d]+");
                     }
-                    for(String v : uris){
-                        if (v.indexOf("{") > 0) {
-                            v = v.replaceAll("\\{\\*\\}", "[a-zA-Z\\\\d]+");
-                        }
-                        String regEx = "^" + v + "$";
-                        return (Pattern.compile(regEx).matcher(requestUri).find()) && method.equals(permissionInfo.getMethod());
-                    }
+                    String regEx = "^" + uri + "$";
+                    return (Pattern.compile(regEx).matcher(requestUri).find()) && method.equals(permissionInfo.getMethod());
                 }
                 return false;
             }

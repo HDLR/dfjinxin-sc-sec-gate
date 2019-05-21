@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
 
         //验证成功后清除原先redis的权限缓存
         redisTemplate.delete(RedisConstants.USER_PERMISSION + "::" + user.getUserId());
-        redisTemplate.delete(RedisConstants.ALL_PERMISSION + "::SimpleKey []");
+        redisTemplate.delete(RedisConstants.ALL_PERMISSION + "::" + user.getUserId());
 
         return token;
     }

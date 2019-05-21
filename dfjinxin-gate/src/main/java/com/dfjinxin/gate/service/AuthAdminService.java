@@ -21,9 +21,9 @@ public class AuthAdminService implements IAuthAdminService{
         return adminServiceFeign.permisson(userId);
     }
 
-    @Cacheable(value = RedisConstants.ALL_PERMISSION)
+    @Cacheable(value = RedisConstants.ALL_PERMISSION, key = "#userId")
     @Override
-    public List<PermissionInfo> allPermisson(){
+    public List<PermissionInfo> allPermisson(String userId){
         return adminServiceFeign.allPermisson();
     }
 

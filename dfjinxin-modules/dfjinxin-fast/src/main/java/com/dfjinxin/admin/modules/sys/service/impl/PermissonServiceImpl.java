@@ -65,21 +65,8 @@ public class PermissonServiceImpl implements PermissonService {
             menuList = sysUserDao.queryAllSysUserEntity(userId);
         }
 
-        permissionInfos = new ArrayList<>(menuList.size());
-        for(SysMenuEntity menu : menuList){
-            if(null != menu){
-                PermissionInfo info = new PermissionInfo();
-                info.setCode(menu.getPerms());
-                info.setType(menu.getType());
-                info.setUri(menu.getUrl());
-                info.setMethod(menu.getMethod());
-                info.setName(menu.getName());
-                permissionInfos.add(info);
-            }
-        }
-
         //用户权限列表
-        return permissionInfos;
+        return this.getPermissionInfos(menuList);
     }
 
     @Override
@@ -87,18 +74,42 @@ public class PermissonServiceImpl implements PermissonService {
         List<PermissionInfo> permissionInfos;
         List<SysMenuEntity> menuList = sysMenuDao.selectList(null);
 
-        permissionInfos = new ArrayList<>(menuList.size());
-        for(SysMenuEntity menu : menuList){
-            PermissionInfo info = new PermissionInfo();
-            info.setCode(menu.getPerms());
-            info.setType(menu.getType());
-            info.setUri(menu.getUrl());
-            info.setMethod(menu.getMethod());
-            info.setName(menu.getName());
-            permissionInfos.add(info);
-        }
-
         //用户权限列表
-        return permissionInfos;
+        return this.getPermissionInfos(menuList);
+    }
+
+    private List<PermissionInfo> getPermissionInfos(List<SysMenuEntity> menuList){
+        int size = menuList.size();
+        if(size > 0){
+            List<PermissionInfo> permissionInfos = new ArrayList<PermissionInfo>();
+            for(SysMenuEntity menu : menuList){
+                if(null != menu){
+                    String url = menu.getUrl();
+                    if(StringUtils.isNotBlank(url)){
+                        url = url.replaceAll(" ", "").replaceAll("，", ",");
+                        List<String> urls = new ArrayList<String>();
+                        if(url.contains(",")){
+                            for(String v : url.split(",")){
+                                urls.add(v);
+                            }
+                        }else{
+                            urls.add(url);
+                        }
+
+                        for(String v : urls){
+                            PermissionInfo info = new PermissionInfo();
+                            info.setCode(menu.getPerms());
+                            info.setType(menu.getType());
+                            info.setUri(v);
+                            info.setMethod(menu.getMethod());
+                            info.setName(menu.getName());
+                            permissionInfos.add(info);
+                        }
+                    }
+                }
+            }
+            return permissionInfos;
+        }
+        return new ArrayList<PermissionInfo>();
     }
 }

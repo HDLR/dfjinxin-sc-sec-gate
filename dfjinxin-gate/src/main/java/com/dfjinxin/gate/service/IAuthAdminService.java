@@ -8,5 +8,5 @@ public interface IAuthAdminService {
 
     List<PermissionInfo> permissonByUserId(String userId);
 
-    List<PermissionInfo> allPermisson();
+    List<PermissionInfo> allPermisson(String userId);
 }
