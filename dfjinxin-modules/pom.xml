@@ -16,6 +16,7 @@
     <modules>
         <module>dfjinxin-fast</module>
         <module>dfjinxin-cache</module>
+        <module>dfjinxin-test</module>
     </modules>
 
     <build>
