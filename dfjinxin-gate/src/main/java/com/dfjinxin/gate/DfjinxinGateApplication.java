@@ -6,6 +6,7 @@ import com.dfjinxin.common.EnableDfjinxinCommon;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
@@ -15,6 +16,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients({"com.dfjinxin.auth.client.feign","com.dfjinxin.gate.feign"})
 @EnabledfjinxinCache
 @EnableDfjinxinCommon
+@EnableCircuitBreaker
 @EnableAutoConfiguration
 public class DfjinxinGateApplication {
 
