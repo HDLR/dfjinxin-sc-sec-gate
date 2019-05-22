@@ -1,5 +1,6 @@
-package com.dfjinxin.admin.feign;
+package com.dfjinxin.admin.feign.fall;
 
+import com.dfjinxin.admin.feign.TestFeignService;
 import com.dfjinxin.common.exception.auth.FeignException;
 import com.dfjinxin.common.msg.ObjectRestResponse;
 import com.dfjinxin.common.msg.R;
